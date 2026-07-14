@@ -16,5 +16,21 @@ Aspect Ratio:
 
 User Request:
 {user_prompt}
+
+Additional User Clarifications:
+Subject:
+{subject}
+
+Action:
+{action}
+
+Location:
+{location}
+
+Composition:
+{composition}
+
+Style:
+{style}
 Generate a high_quality image suitable for professional printing.
 """
