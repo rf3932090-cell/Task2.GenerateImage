@@ -11,3 +11,7 @@ class PromptField(str, Enum):
 class Question(BaseModel):
     field: PromptField
     question: str
+
+class Answer(BaseModel):
+    field: PromptField
+    answer: str

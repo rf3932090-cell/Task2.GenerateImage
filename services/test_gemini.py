@@ -9,7 +9,7 @@ client = genai.Client(
 )
 print(client.models.list())
 response = client.models.generate_content(
-    model="models/gemini-2.5-flash",
+    model="models/gemini-3.1-flash-lite",
     contents="Say hello in one sentence."
 )
 

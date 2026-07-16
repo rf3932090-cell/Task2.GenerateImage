@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field, HttpUrl
 from typing import Optional
 from enum import Enum
-from models.analysis_models import PromptContext
+from models.conversation_models import Answer
+
 class ProductType(str, Enum):
     Wall_Art = "Wall_Art"
     Mug = "Mug"
@@ -30,6 +31,10 @@ class GenerateRequest(BaseModel):
         min_length=5,
         max_length=500
     )
-    prompt_context: Optional[PromptContext] = None
+    #prompt_context: Optional[PromptContext] = None
 
     
+class GenerateImageRequest(BaseModel):
+    order_details: OrderDetails
+    user_prompt: str
+    answers: list[Answer]

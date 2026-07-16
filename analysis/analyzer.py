@@ -1,5 +1,5 @@
 from models.request_models import GenerateRequest
-from models.analysis_models import PromptAnalysisResult
+from models.analysis_models import AnalyzeResponse, AnalyzerOutput
 from services.analyzer_service import PromptAnalysisService
 
 class PromptAnalyzer:
@@ -7,8 +7,9 @@ class PromptAnalyzer:
     def __init__(self):
         self.analysis_service = PromptAnalysisService()
 
-    def analyze(self, request: GenerateRequest) -> PromptAnalysisResult:
+    def analyze(self, request: GenerateRequest) -> AnalyzerOutput:
 
         result = self.analysis_service.analyze(request.model_dump())
-        return PromptAnalysisResult(**result)
+        print(result)
+        return AnalyzerOutput(**result)
    

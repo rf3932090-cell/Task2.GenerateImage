@@ -1,11 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from builder.prompt_builder import PromptBuilder
 from services.openrouter import generate_image
-from models.request_models import GenerateRequest
+from models.request_models import GenerateRequest, GenerateImageRequest
+from models.analysis_models import AnalyzeResponse
 from fastapi.responses import HTMLResponse
 from fastapi.responses import Response
 import base64
 from analysis.analyzer import PromptAnalyzer
+
 app = FastAPI(
     title="Image Generation API",
     version = "1.0.0"
@@ -21,19 +23,24 @@ def root():
     return {
         "message": "Image Generation API is running."
     }
-
-@app.post("/generate", response_class=HTMLResponse)
-def generate(request: GenerateRequest):
+@app.post("/analyze")
+def analyze(request: GenerateRequest):
     try:
-        if request.prompt_context is None:
-            analysis = analyzer.analyze(request)
-            request.prompt_context = analysis.prompt_context
-            if not analysis.complete:
-                return {
-                    "status": "need_more_information",
-                    "data": request,
-                    "questions": analysis.questions
-                }
+        result = analyzer.analyze(request)
+        return AnalyzeResponse(
+            order_details = request.order_details,
+            user_prompt = request.user_prompt,
+            questions = result.questions
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
+@app.post("/generate")
+def generate(request: GenerateImageRequest):
+    try:
+        
         prompt = prompt_builder.build_prompt(request)
         response = generate_image(prompt)
         image = response.data[0].b64_json
