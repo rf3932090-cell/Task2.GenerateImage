@@ -38,3 +38,7 @@ class GenerateImageRequest(BaseModel):
     order_details: OrderDetails
     user_prompt: str
     answers: list[Answer]
+
+class EditImageRequest(BaseModel):
+    prompt: str
+    

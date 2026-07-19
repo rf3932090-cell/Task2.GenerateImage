@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi import UploadFile, File, Form
 from builder.prompt_builder import PromptBuilder
 from services.openrouter import generate_image
 from models.request_models import GenerateRequest, GenerateImageRequest
@@ -7,6 +8,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.responses import Response
 import base64
 from analysis.analyzer import PromptAnalyzer
+from services.image_edit_service import ImageEditService
 
 app = FastAPI(
     title="Image Generation API",
@@ -55,3 +57,13 @@ def generate(request: GenerateImageRequest):
             detail=str(e)
         )
        
+
+@app.post("/edit")
+def edit(image: UploadFile, prompt: str):
+    image_edit_service = ImageEditService()
+    image = image_edit_service.edit((
+            image.filename,
+            image.file,
+            image.content_type,
+        ), prompt)
+    return image
