@@ -18,7 +18,6 @@ class PromptAnalysisService:
 
         self.model = os.getenv("ANALYZER_MODEL")
 
-        print("MODEL =", self.model)
 
 
     def analyze(self, request: dict):

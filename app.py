@@ -9,6 +9,7 @@ from fastapi.responses import Response
 import base64
 from analysis.analyzer import PromptAnalyzer
 from services.image_edit_service import ImageEditService
+import requests
 
 app = FastAPI(
     title="Image Generation API",
@@ -61,9 +62,14 @@ def generate(request: GenerateImageRequest):
 @app.post("/edit")
 def edit(image: UploadFile, prompt: str):
     image_edit_service = ImageEditService()
-    image = image_edit_service.edit((
-            image.filename,
-            image.file,
-            image.content_type,
-        ), prompt)
-    return image
+    
+    response = image_edit_service.edit(image.file, prompt)
+    image_url = response.data[0].url
+
+    image_response = requests.get(image_url)
+    image_response.raise_for_status()
+
+    return Response(
+        content=image_response.content,
+        media_type="image/png"
+    )

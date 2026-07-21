@@ -5,6 +5,6 @@ import httpx
 
 load_dotenv()
 client = OpenAI(
-    base_url="https://openrouter.ai/api/v1/",
-    api_key=os.getenv("OPENROUTER_API_KEY"),
+    base_url="https://api.avalai.ir/v1",
+    api_key=os.getenv("AVALAI_API_KEY"),
 )
