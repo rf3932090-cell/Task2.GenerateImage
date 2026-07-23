@@ -1,16 +1,10 @@
-from google import genai
-from dotenv import load_dotenv
-import os
+from openrouter_client import client
 
-load_dotenv()
-
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
-print(client.models.list())
-response = client.models.generate_content(
-    model="models/gemini-3.1-flash-lite",
-    contents="Say hello in one sentence."
+response = client.chat.completions.create(
+    model="google/gemini-2.5-flash",
+    messages=[
+        {"role": "user", "content": "Hello"}
+    ]
 )
 
-print(response.text)
+print(response.choices[0].message.content)

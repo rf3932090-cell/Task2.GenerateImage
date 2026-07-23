@@ -1,5 +1,5 @@
 from models.request_models import GenerateRequest
-from models.analysis_models import AnalyzeResponse, AnalyzerOutput
+from models.analysis_models import AnalyzerOutput
 from services.analyzer_service import PromptAnalysisService
 
 class PromptAnalyzer:
@@ -11,5 +11,7 @@ class PromptAnalyzer:
 
         result = self.analysis_service.analyze(request.model_dump())
         print(result)
+        result.setdefault("questions", [])
+
         return AnalyzerOutput(**result)
    
