@@ -13,5 +13,5 @@ class Question(BaseModel):
     question: str
 
 class Answer(BaseModel):
-    field: PromptField
+    field: str
     answer: str

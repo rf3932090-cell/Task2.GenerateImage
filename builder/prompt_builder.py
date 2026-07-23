@@ -1,12 +1,19 @@
 from builder.templates import PROMPT_TEMPLATE
 from models.request_models import GenerateImageRequest
 class PromptBuilder:
+
+    def _build_clarifications(self, answers):
+        if not answers:
+            return "None"
+
+        return "\n\n".join(
+            f"{answer.field}:\n{answer.answer}"
+            for answer in answers
+        )
     def build_prompt(self, request: GenerateImageRequest):
 
-        answer_map = {
-            answer.field.value: answer.answer
-            for answer in request.answers
-        }
+        
+
 
         prompt = PROMPT_TEMPLATE.format(
             product_type=request.order_details.product_type,
@@ -16,12 +23,7 @@ class PromptBuilder:
             aspect_ratio=request.order_details.dimensions.aspect_ratio,
 
             user_prompt=request.user_prompt,
-
-            subject=answer_map.get("subject", ""),
-            action=answer_map.get("action", ""),
-            location=answer_map.get("location", ""),
-            composition=answer_map.get("composition", ""),
-            style=answer_map.get("style", ""),
-        )
+            clarifications = self._build_clarifications(request.answers)        )
 
         return prompt
+
