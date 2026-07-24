@@ -30,12 +30,11 @@ def root():
 def analyze(request: GenerateRequest):
     try:
         result = analyzer.analyze(request)
-        return {
-            "order_details": request.order_details,
-            "user_prompt": request.user_prompt,
-            "checklist": result.checklist,
-            "questions": result.questions
-        }
+        return AnalyzeResponse(
+            order_details = request.order_details,
+            user_prompt = request.user_prompt,
+            questions = result.questions
+        )
     except Exception as e:
         raise HTTPException(
             status_code=500,
