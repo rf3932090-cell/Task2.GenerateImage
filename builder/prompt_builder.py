@@ -1,5 +1,6 @@
 from builder.templates import PROMPT_TEMPLATE
 from models.request_models import GenerateImageRequest
+from .concepts import PRODUCT_CONCEPTS
 class PromptBuilder:
 
     def _build_clarifications(self, answers):
@@ -12,11 +13,18 @@ class PromptBuilder:
         )
     def build_prompt(self, request: GenerateImageRequest):
 
-        
+        product_type = request.order_details.product_type
+        product_concept = PRODUCT_CONCEPTS.get(
+            product_type, {}
+        ).get(
+            "prompt_context",
+            ""
+        )
 
 
         prompt = PROMPT_TEMPLATE.format(
-            product_type=request.order_details.product_type,
+            product_type=product_type,
+            product_concept=product_concept,
             medium_style=request.order_details.medium_style,
             color_palette=request.order_details.color_palette,
             dimensions=f"{request.order_details.dimensions.width_cm}x{request.order_details.dimensions.height_cm}",

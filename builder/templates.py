@@ -1,6 +1,8 @@
 PROMPT_TEMPLATE=""""
 Create a {product_type}.
 
+Product Concept:
+{product_concept}
 
 Style:
 {medium_style}

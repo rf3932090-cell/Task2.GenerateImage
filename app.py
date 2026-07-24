@@ -46,7 +46,9 @@ def generate(request: GenerateImageRequest):
     try:
         
         prompt = prompt_builder.build_prompt(request)
-        response = generate_image(prompt)
+        if request.order_details.reference_image:
+            reference_image = request.order_details.reference_image.file_url
+        response = generate_image(prompt, reference_image)
         image = response.data[0].b64_json
         image_bytes = base64.b64decode(image)
         return Response(
