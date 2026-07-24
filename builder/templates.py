@@ -1,6 +1,8 @@
 PROMPT_TEMPLATE=""""
 Create a {product_type}.
 
+Product Concept:
+{product_concept}
 
 Style:
 {medium_style}
@@ -18,19 +20,7 @@ User Request:
 {user_prompt}
 
 Additional User Clarifications:
-Subject:
-{subject}
+{clarifications}
 
-Action:
-{action}
-
-Location:
-{location}
-
-Composition:
-{composition}
-
-Style:
-{style}
-Generate a high_quality image suitable for professional printing.
+Generate a high-quality image suitable for professional printing.
 """

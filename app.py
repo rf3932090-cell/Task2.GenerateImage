@@ -3,7 +3,7 @@ from fastapi import UploadFile, File, Form
 from builder.prompt_builder import PromptBuilder
 from services.openrouter import generate_image
 from models.request_models import GenerateRequest, GenerateImageRequest
-from models.analysis_models import AnalyzeResponse
+
 from fastapi.responses import HTMLResponse
 from fastapi.responses import Response
 import base64
@@ -30,11 +30,12 @@ def root():
 def analyze(request: GenerateRequest):
     try:
         result = analyzer.analyze(request)
-        return AnalyzeResponse(
-            order_details = request.order_details,
-            user_prompt = request.user_prompt,
-            questions = result.questions
-        )
+        return {
+            "order_details": request.order_details,
+            "user_prompt": request.user_prompt,
+            "checklist": result.checklist,
+            "questions": result.questions
+        }
     except Exception as e:
         raise HTTPException(
             status_code=500,
@@ -45,7 +46,9 @@ def generate(request: GenerateImageRequest):
     try:
         
         prompt = prompt_builder.build_prompt(request)
-        response = generate_image(prompt)
+        if request.order_details.reference_image:
+            reference_image = request.order_details.reference_image.file_url
+        response = generate_image(prompt, reference_image)
         image = response.data[0].b64_json
         image_bytes = base64.b64decode(image)
         return Response(
